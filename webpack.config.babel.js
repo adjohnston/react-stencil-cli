@@ -19,7 +19,7 @@ export default {
   },
 
   externals: {
-    path: 'path',
+    resolve: 'resolve',
     fs: 'fs',
     log: 'single-line-log',
     chalk: 'chalk',
