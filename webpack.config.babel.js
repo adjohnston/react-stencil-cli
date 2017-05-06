@@ -20,7 +20,7 @@ export default {
 
   externals: {
     resolve: 'resolve',
-    fs: 'fs',
+    fs: 'fs-extra',
     log: 'single-line-log',
     chalk: 'chalk',
     glob: 'globby',
