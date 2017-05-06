@@ -7,7 +7,9 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "webpack -w",
+    "prepublish": "webpack -p"
   },
   "repository": {
     "type": "git",
