@@ -5,7 +5,9 @@ export default {
 
   output: {
     filename: 'cli.js',
-    path: resolve(__dirname, 'dist')
+    path: resolve(__dirname, 'dist'),
+    library: 'react-stencil',
+    libraryTarget: 'umd'
   },
 
   target: 'node',
