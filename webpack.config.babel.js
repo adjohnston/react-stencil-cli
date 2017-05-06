@@ -22,12 +22,12 @@ export default {
 
   externals: {
     resolve: 'resolve',
-    fs: 'fs-extra',
-    log: 'single-line-log',
     chalk: 'chalk',
-    glob: 'globby',
-    reactDocs: 'react-docgen',
+    globby: 'globby',
     inquirer: 'inquirer',
-    ramda: 'ramda'
+    ramda: 'ramda',
+    'fs-extra': 'fs-extra',
+    'single-line-log': 'single-line-log',
+    'react-docgen': 'react-docgen'
   }
 }
