@@ -35,7 +35,7 @@ inquirer
       shouldMap
     } = answers
 
-    glob(Array.isArray(directory) ? directory.map(appendExtensions) : appendExtensions(directory))
+    glob((directory.map && directory.map(appendExtensions)) || appendExtensions(directory))
       .then((componentPaths) => {
         fs.ensureFile(resolve(outputPath, 'global-definitions.js'), throwErr)
 
