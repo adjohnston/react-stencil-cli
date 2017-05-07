@@ -3,6 +3,6 @@ const appendExtensions = path => {
   return `${path}/**/*.?(js|jsx)`
 }
 
-export {
+module.exports = {
   appendExtensions
 }
