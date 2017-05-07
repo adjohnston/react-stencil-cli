@@ -14,6 +14,10 @@ const {
   appendExtensions
 } = require('./helpers/paths')
 
+const {
+  handleError
+} = require('./helpers/handlers')
+
 let componentCount = 0
 let mapping = ''
 
@@ -21,10 +25,6 @@ const {
   getPathName,
   getComponentName
 } = helpers
-
-const throwErr = (err) => {
-  if (err) throw err
-}
 
 inquirer
   .prompt(require('./helpers/prompts'))
@@ -37,14 +37,12 @@ inquirer
 
     glob((directory.map && directory.map(appendExtensions)) || appendExtensions(directory))
       .then((componentPaths) => {
-        fs.ensureFile(resolve(outputPath, 'global-definitions.js'), throwErr)
+        fs.ensureFile(resolve(outputPath, 'global-definitions.js'), handleError)
 
         componentPaths.map(componentPath => {
           const componentPathName = getPathName(componentPath)
 
-          fs.readFile(componentPath, 'utf8', (err, code) => {
-            if (err) throw err
-
+          fs.readFile(componentPath, 'utf8', (handleError, code) => {
             let props
             try {
               props = reactDocs.parse(code).props
@@ -63,10 +61,10 @@ inquirer
               return prev
             }, {})
 
-            fs.ensureFile(resolve(outputPath, componentPathName, 'definitions.js'), throwErr)
+            fs.ensureFile(resolve(outputPath, componentPathName, 'definitions.js'), handleError)
 
             const typesExport = `export default ${JSON.stringify(types, null, 2)}`
-            fs.outputFile(resolve(outputPath, componentPathName, 'types.js'), typesExport, throwErr)
+            fs.outputFile(resolve(outputPath, componentPathName, 'types.js'), typesExport, handleError)
 
             if (shouldMap) {
               const component = componentTemplate(resolve(componentPath))
@@ -75,8 +73,8 @@ inquirer
 
               mapping += mappingTemplate(componentName, resolve(outputPath, componentPathName, 'component'))
 
-              fs.outputFile(path, component, throwErr)
-              fs.outputFile(resolve(outputPath, 'components.js'), mapping, throwErr)
+              fs.outputFile(path, component, handleError)
+              fs.outputFile(resolve(outputPath, 'components.js'), mapping, handleError)
             }
           })
         })
