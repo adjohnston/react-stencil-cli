@@ -10,6 +10,10 @@ const helpers = require('./helpers')
 const componentTemplate = require('./templates/component')
 const mappingTemplate = require('./templates/mapping')
 
+const {
+  appendExtensions
+} = require('./helpers/paths')
+
 let componentCount = 0
 let mapping = ''
 
@@ -22,10 +26,6 @@ const throwErr = (err) => {
   if (err) throw err
 }
 
-const getComponentPaths = c => {
-  return `${c}/**/*.?(js|jsx)`
-}
-
 inquirer
   .prompt(require('./helpers/prompts'))
   .then(answers => {
@@ -35,7 +35,7 @@ inquirer
       m
     } = answers
 
-    glob(Array.isArray(c) ? c.map(getComponentPaths) : getComponentPaths(c))
+    glob(Array.isArray(c) ? c.map(appendExtensions) : appendExtensions(c))
       .then((componentPaths) => {
         fs.ensureFile(resolve(d, 'global-definitions.js'), throwErr)
 
