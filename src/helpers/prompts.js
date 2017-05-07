@@ -1,18 +1,18 @@
 module.exports = [
   {
-    name: 'c',
+    name: 'directory',
     message: 'Where are your components?',
     validate: (answer) => answer !== ''
   },
   {
-    name: 'd',
+    name: 'outputPath',
     message: 'Where do you want generated specs to live?',
     validate: (answer) => answer !== ''
   },
   {
     type: 'confirm',
-    name: 'm',
-    message: 'Do you want to automagically generate component mapping?',
+    name: 'shouldMap',
+    message: 'Do you want to automatically generate component mappings?',
     default: true
   }
 ]

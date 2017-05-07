@@ -30,14 +30,14 @@ inquirer
   .prompt(require('./helpers/prompts'))
   .then(answers => {
     const {
-      c,
-      d,
-      m
+      directory,
+      outputPath,
+      shouldMap
     } = answers
 
-    glob(Array.isArray(c) ? c.map(appendExtensions) : appendExtensions(c))
+    glob(Array.isArray(directory) ? directory.map(appendExtensions) : appendExtensions(directory))
       .then((componentPaths) => {
-        fs.ensureFile(resolve(d, 'global-definitions.js'), throwErr)
+        fs.ensureFile(resolve(outputPath, 'global-definitions.js'), throwErr)
 
         componentPaths.map(componentPath => {
           const componentPathName = getPathName(componentPath)
@@ -63,20 +63,20 @@ inquirer
               return prev
             }, {})
 
-            fs.ensureFile(resolve(d, componentPathName, 'definitions.js'), throwErr)
+            fs.ensureFile(resolve(outputPath, componentPathName, 'definitions.js'), throwErr)
 
             const typesExport = `export default ${JSON.stringify(types, null, 2)}`
-            fs.outputFile(resolve(d, componentPathName, 'types.js'), typesExport, throwErr)
+            fs.outputFile(resolve(outputPath, componentPathName, 'types.js'), typesExport, throwErr)
 
-            if (m) {
+            if (shouldMap) {
               const component = componentTemplate(resolve(componentPath))
-              const path = resolve(d, componentPathName, 'component.js')
+              const path = resolve(outputPath, componentPathName, 'component.js')
               const componentName = getComponentName(componentPathName)
 
-              mapping += mappingTemplate(componentName, resolve(d, componentPathName, 'component'))
+              mapping += mappingTemplate(componentName, resolve(outputPath, componentPathName, 'component'))
 
               fs.outputFile(path, component, throwErr)
-              fs.outputFile(resolve(d, 'components.js'), mapping, throwErr)
+              fs.outputFile(resolve(outputPath, 'components.js'), mapping, throwErr)
             }
           })
         })
