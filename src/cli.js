@@ -42,7 +42,9 @@ inquirer
         componentPaths.map(componentPath => {
           const componentPathName = getPathName(componentPath)
 
-          fs.readFile(componentPath, 'utf8', (handleError, code) => {
+          fs.readFile(componentPath, 'utf8', (error, code) => {
+            if (error) throw error
+
             let props
             try {
               props = reactDocs.parse(code).props
