@@ -6,12 +6,13 @@ const glob = require('globby')
 const reactDocs = require('react-docgen')
 const inquirer = require('inquirer')
 
-const helpers = require('./helpers')
 const componentTemplate = require('./templates/component')
 const mappingTemplate = require('./templates/mapping')
 
 const {
-  appendExtensions
+  appendExtensions,
+  getPathName,
+  getComponentName
 } = require('./helpers/paths')
 
 const {
@@ -20,11 +21,6 @@ const {
 
 let componentCount = 0
 let mapping = ''
-
-const {
-  getPathName,
-  getComponentName
-} = helpers
 
 inquirer
   .prompt(require('./helpers/prompts'))
