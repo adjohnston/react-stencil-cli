@@ -49,14 +49,14 @@ inquirer
               log(chalk.green('•').repeat(componentCount))
             } catch (e) { return }
 
-            const propDefs = Object.keys(props).reduce((prev, prop) => {
+            const propDefs = Object.keys(props).reduce((previous, prop) => {
               const {
                 type: {name},
                 required
               } = props[prop]
 
-              prev[prop] = {types: [name, required]}
-              return prev
+              previous[prop] = {types: [name, required]}
+              return previous
             }, {})
 
             fs.ensureFile(resolve(outputPath, componentPathName, 'definitions.js'), handleError)
