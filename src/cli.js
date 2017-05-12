@@ -49,7 +49,7 @@ inquirer
               log(chalk.green('•').repeat(componentCount))
             } catch (e) { return }
 
-            const types = Object.keys(props).reduce((prev, prop) => {
+            const propDefs = Object.keys(props).reduce((prev, prop) => {
               const {
                 type: {name},
                 required
@@ -61,8 +61,8 @@ inquirer
 
             fs.ensureFile(resolve(outputPath, componentPathName, 'definitions.js'), handleError)
 
-            const typesExport = `export default ${JSON.stringify(types, null, 2)}`
-            fs.outputFile(resolve(outputPath, componentPathName, 'types.js'), typesExport, handleError)
+            const propDefsExport = `export default ${JSON.stringify(propDefs, null, 2)}`
+            fs.outputFile(resolve(outputPath, componentPathName, 'propDefs.js'), propDefsExport, handleError)
 
             if (shouldMap) {
               const component = componentTemplate(resolve(componentPath))
