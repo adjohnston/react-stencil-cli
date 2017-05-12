@@ -55,7 +55,7 @@ inquirer
                 required
               } = props[prop]
 
-              prev[prop] = {props: [name, required]}
+              prev[prop] = {types: [name, required]}
               return prev
             }, {})
 
