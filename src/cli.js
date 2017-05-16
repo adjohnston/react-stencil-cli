@@ -55,23 +55,23 @@ inquirer
                 required
               } = props[prop]
 
-              previous[prop] = {types: [name, required]}
+              previous[prop] = {props: [name, required]}
               return previous
             }, {})
 
-            fs.ensureFile(resolve(outputPath, componentPathName, 'definitions.js'), handleError)
+            fs.ensureFile(resolve(outputPath, componentPathName, 'component-definitions.js'), handleError)
 
-            const propDefsExport = `export default ${JSON.stringify(propDefs, null, 2)}`
-            fs.outputFile(resolve(outputPath, componentPathName, 'propDefs.js'), propDefsExport, handleError)
+            const output = `export default ${JSON.stringify(propDefs, null, 2)}`
+            fs.outputFile(resolve(outputPath, componentPathName, 'prop-definitions.js'), output, handleError)
 
             if (shouldMap) {
               const component = componentTemplate(resolve(componentPath))
-              const path = resolve(outputPath, componentPathName, 'component.js')
+              const output = resolve(outputPath, componentPathName, 'component.js')
               const componentName = getComponentName(componentPathName)
 
               mapping += mappingTemplate(componentName, resolve(outputPath, componentPathName, 'component'))
 
-              fs.outputFile(path, component, handleError)
+              fs.outputFile(output, component, handleError)
               fs.outputFile(resolve(outputPath, 'components.js'), mapping, handleError)
             }
           })
