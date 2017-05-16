@@ -49,29 +49,29 @@ inquirer
               log(chalk.green('•').repeat(componentCount))
             } catch (e) { return }
 
-            const types = Object.keys(props).reduce((prev, prop) => {
+            const propDefs = Object.keys(props).reduce((previous, prop) => {
               const {
                 type: {name},
                 required
               } = props[prop]
 
-              prev[prop] = {props: [name, required]}
-              return prev
+              previous[prop] = {props: [name, required]}
+              return previous
             }, {})
 
-            fs.ensureFile(resolve(outputPath, componentPathName, 'definitions.js'), handleError)
+            fs.ensureFile(resolve(outputPath, componentPathName, 'component-definitions.js'), handleError)
 
-            const typesExport = `export default ${JSON.stringify(types, null, 2)}`
-            fs.outputFile(resolve(outputPath, componentPathName, 'types.js'), typesExport, handleError)
+            const output = `export default ${JSON.stringify(propDefs, null, 2)}`
+            fs.outputFile(resolve(outputPath, componentPathName, 'prop-definitions.js'), output, handleError)
 
             if (shouldMap) {
               const component = componentTemplate(resolve(componentPath))
-              const path = resolve(outputPath, componentPathName, 'component.js')
+              const output = resolve(outputPath, componentPathName, 'component.js')
               const componentName = getComponentName(componentPathName)
 
               mapping += mappingTemplate(componentName, resolve(outputPath, componentPathName, 'component'))
 
-              fs.outputFile(path, component, handleError)
+              fs.outputFile(output, component, handleError)
               fs.outputFile(resolve(outputPath, 'components.js'), mapping, handleError)
             }
           })
