@@ -13,7 +13,7 @@ const splitOnHyphen = (str) => {
 
 //    upperCaseWords : array -> array
 const upperCaseWords = (words) => {
-  return R.map(word => word.toUpperCase(), words)
+  return R.map(word => word.replace(/^./, letter => letter.toUpperCase()), words)
 }
 
 //    joinChars : array -> string
