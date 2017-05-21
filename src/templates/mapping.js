@@ -1,4 +1,3 @@
-module.exports = (name, path) => (
-  `import ${name} from '${path}';
-  export {${name}};\n`
-)
+module.exports = (componentName, componentPathName) => (
+`import ${componentName} from './${componentPathName}/component'
+export {${componentName}}`)
