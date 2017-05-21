@@ -69,7 +69,7 @@ inquirer
               const output = resolve(outputPath, componentPathName, 'component.js')
               const componentName = getComponentName(componentPathName)
 
-              mapping += mappingTemplate(componentName, resolve(outputPath, componentPathName, 'component'))
+              mapping += mappingTemplate(componentName, componentPathName)
 
               fs.outputFile(output, component, handleError)
               fs.outputFile(resolve(outputPath, 'components.js'), mapping, handleError)
