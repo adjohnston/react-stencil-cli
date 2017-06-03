@@ -1,6 +1,5 @@
 module.exports = (componentPath) => (
-  `import React from 'react'
-  import Stencil, {specify} from 'react-stencil'
+  `import Stencil, {specify} from 'react-stencil'
   import c from '${componentPath}'
   import gD from '../global-definitions'
   import p from './prop-definitions'
