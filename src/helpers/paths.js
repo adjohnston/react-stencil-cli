@@ -1,6 +1,6 @@
 const globby = require('globby')
 const R = require('ramda')
-const path = require('path')
+const basename = require('path').basename
 
 //    appendExtensions : string -> string
 const appendExtensions = patterns => {
@@ -29,7 +29,7 @@ const joinChars = characters => {
 
 //    getPathName : string -> string
 const getPathName = (componentPath) => {
-  const pathName = path.basename(componentPath).split('.')
+  const pathName = basename(componentPath).split('.')
 
   if (pathName.length > 1) return pathName[0]
   throw new Error(`path ${componentPath} must include component file`)
