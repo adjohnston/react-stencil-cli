@@ -11,7 +11,7 @@ const mappingTemplate = require('./templates/mapping')
 
 const {
   appendExtensions,
-  getPathName,
+  getComponentPathName,
   getComponentName
 } = require('./helpers/paths')
 

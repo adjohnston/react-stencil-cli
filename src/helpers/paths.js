@@ -7,8 +7,8 @@ const appendExtensions = path => {
 }
 
 //    splitOnHyphen : string -> array
-const splitOnHyphen = (str) => {
-  return R.split('-', str)
+const splitOnHyphen = string => {
+  return R.split('-', string)
 }
 
 //    upperCaseWords : array -> array
@@ -17,8 +17,8 @@ const upperCaseWords = (words) => {
 }
 
 //    joinChars : array -> string
-const joinChars = (chars) => {
-  return R.join('', chars)
+const joinChars = characters => {
+  return R.join('', characters)
 }
 
 //    getPathName : string -> string
