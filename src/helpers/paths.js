@@ -17,8 +17,8 @@ const splitOnHyphen = string => {
   return R.split('-', string)
 }
 
-//    upperCaseWords : array -> array
-const upperCaseWords = (words) => {
+//    componentCase : array -> array
+const componentCase = words => {
   return R.map(word => word.replace(/^./, letter => letter.toUpperCase()), words)
 }
 
@@ -27,8 +27,8 @@ const joinChars = characters => {
   return R.join('', characters)
 }
 
-//    getPathName : string -> string
-const getPathName = (componentPath) => {
+//    getComponentPathName : string -> string
+const getComponentPathName = componentPath => {
   const pathName = basename(componentPath).split('.')
 
   if (pathName.length > 1) return pathName[0]
@@ -39,7 +39,7 @@ const getPathName = (componentPath) => {
 const getComponentName = (componentPathName) => (
   R.pipe(
     splitOnHyphen,
-    upperCaseWords,
+    componentCase,
     joinChars
   )(componentPathName)
 )
@@ -48,8 +48,8 @@ module.exports = {
   appendExtensions,
   getPaths,
   splitOnHyphen,
-  upperCaseWords,
+  componentCase,
   joinChars,
-  getPathName,
+  getComponentPathName,
   getComponentName
 }
