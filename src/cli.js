@@ -2,7 +2,6 @@ const resolve = require('path').resolve
 const fs = require('fs-extra')
 const log = require('single-line-log').stdout
 const chalk = require('chalk')
-const glob = require('globby')
 const reactDocs = require('react-docgen')
 const inquirer = require('inquirer')
 

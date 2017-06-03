@@ -1,9 +1,15 @@
+const globby = require('globby')
 const R = require('ramda')
 const path = require('path')
 
-//    appendExtensions : string > string
-const appendExtensions = path => {
-  return `${path}/**/*.?(js|jsx)`
+//    appendExtensions : string -> string
+const appendExtensions = patterns => {
+  return `${patterns}/**/*.?(js|jsx)`
+}
+
+//    getPaths : string -> array
+const getPaths = patterns => {
+  return globby.sync(appendExtensions(patterns))
 }
 
 //    splitOnHyphen : string -> array
@@ -40,6 +46,7 @@ const getComponentName = (componentPathName) => (
 
 module.exports = {
   appendExtensions,
+  getPaths,
   splitOnHyphen,
   upperCaseWords,
   joinChars,
