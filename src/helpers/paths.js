@@ -14,7 +14,7 @@ const getPaths = patterns => {
 
 //    splitOnHyphen : string -> array
 const splitOnHyphen = string => {
-  return R.split('-', string)
+  return string.split('-')
 }
 
 //    componentCase : array -> array
@@ -22,9 +22,9 @@ const componentCase = words => {
   return R.map(word => word.replace(/^./, letter => letter.toUpperCase()), words)
 }
 
-//    joinChars : array -> string
-const joinChars = characters => {
-  return R.join('', characters)
+//    joinCharactersWithSpace : array -> string
+const joinCharactersWithSpace = characters => {
+  return characters.join(' ')
 }
 
 //    getComponentPathName : string -> string
@@ -35,12 +35,12 @@ const getComponentPathName = componentPath => {
   throw new Error(`path ${componentPath} must include component file`)
 }
 
-//    getComponentName : string -> string
-const getComponentName = (componentPathName) => (
+//    getReadableComponentName : string -> string
+const getReadableComponentName = componentPathName => (
   R.pipe(
     splitOnHyphen,
     componentCase,
-    joinChars
+    joinCharactersWithSpace
   )(componentPathName)
 )
 
@@ -49,7 +49,7 @@ module.exports = {
   getPaths,
   splitOnHyphen,
   componentCase,
-  joinChars,
+  joinCharactersWithSpace,
   getComponentPathName,
-  getComponentName
+  getReadableComponentName
 }
