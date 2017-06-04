@@ -8,11 +8,5 @@ module.exports = [
     name: 'outputPath',
     message: 'Where do you want generated specs to live?',
     validate: (answer) => answer !== ''
-  },
-  {
-    type: 'confirm',
-    name: 'shouldMap',
-    message: 'Do you want to automatically generate component mappings?',
-    default: true
   }
 ]
