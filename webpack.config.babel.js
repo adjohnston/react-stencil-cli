@@ -28,6 +28,7 @@ export default {
     ramda: 'ramda',
     'fs-extra': 'fs-extra',
     'single-line-log': 'single-line-log',
-    'react-docgen': 'react-docgen'
+    'react-docgen': 'react-docgen',
+    'stringify-object': 'stringify-object'
   }
 }
