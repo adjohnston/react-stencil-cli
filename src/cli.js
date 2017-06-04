@@ -5,75 +5,85 @@ const chalk = require('chalk')
 const reactDocs = require('react-docgen')
 const inquirer = require('inquirer')
 
-const componentTemplate = require('./templates/component')
-const mappingTemplate = require('./templates/mapping')
-
 const {
-  appendExtensions,
+  getPaths,
   getComponentPathName,
-  getComponentName
+  getReadableComponentName
 } = require('./helpers/paths')
 
-const {
-  handleError
-} = require('./helpers/handlers')
-
-let componentCount = 0
-let mapping = ''
+let counter = 0
 
 inquirer
   .prompt(require('./helpers/prompts'))
   .then(answers => {
     const {
       directory,
-      outputPath,
-      shouldMap
+      outputPath
     } = answers
 
-    glob((directory.map && directory.map(appendExtensions)) || appendExtensions(directory))
-      .then((componentPaths) => {
-        fs.ensureFile(resolve(outputPath, 'global-definitions.js'), handleError)
+    const paths = getPaths(directory)
 
-        componentPaths.map(componentPath => {
-          const componentPathName = getPathName(componentPath)
+    paths.map(path => {
+      let props
+      let description
+      let template
+      let file
+      let data
 
-          fs.readFile(componentPath, 'utf8', (error, code) => {
-            if (error) throw error
+      const pathName = getComponentPathName(path)
+      const name = getReadableComponentName(pathName)
+      const componentOutputPath = resolve(outputPath, pathName)
+      const src = fs.readFileSync(path, 'utf8')
 
-            let props
-            try {
-              props = reactDocs.parse(code).props
+      try {
+        const parsed = reactDocs.parse(src)
+        props = parsed.props
+        description = parsed.description
+        counter++
+      } catch (e) { return }
 
-              componentCount++
-              log(chalk.green('•').repeat(componentCount))
-            } catch (e) { return }
+      //  write component definitions
+      template = require('./templates/component')
+      file = resolve(componentOutputPath, 'component.js')
+      data = template(name, description)
 
-            const propDefs = Object.keys(props).reduce((previous, prop) => {
-              const {
-                type: {name},
-                required
-              } = props[prop]
+      if (!fs.existsSync(file)) {
+        fs.ensureFileSync(file)
+        fs.writeFileSync(file, data)
+      }
 
-              previous[prop] = {props: [name, required]}
-              return previous
-            }, {})
+      //  write prop definitions
+      template = require('./templates/props')
+      file = resolve(componentOutputPath, 'props.js')
+      data = template(Object.keys(props).reduce((propDefs, prop) => {
+        const {
+          type: {name},
+          required
+        } = props[prop]
 
-            fs.ensureFile(resolve(outputPath, componentPathName, 'component-definitions.js'), handleError)
+        const def = {
+          props: [name, required],
+          description: props[prop].description
+        }
 
-            const output = `export default ${JSON.stringify(propDefs, null, 2)}`
-            fs.outputFile(resolve(outputPath, componentPathName, 'prop-definitions.js'), output, handleError)
+        if (props[prop].defaultValue) {
+          def.default = props[prop].defaultValue.value
+        }
 
-            if (shouldMap) {
-              const component = componentTemplate(resolve(componentPath))
-              const output = resolve(outputPath, componentPathName, 'component.js')
-              const componentName = getComponentName(componentPathName)
+        propDefs[prop] = def
+        return propDefs
+      }, {}))
+      fs.writeFileSync(file, data)
 
-              mapping += mappingTemplate(componentName, componentPathName)
+      file = resolve(outputPath, 'globals.js')
+      data = require('./templates/globals')
+      if (!fs.existsSync(file)) {
+        fs.ensureFileSync(file)
+        fs.writeFileSync(file, data)
+      }
 
-              fs.outputFile(output, component, handleError)
-              fs.outputFile(resolve(outputPath, 'components.js'), mapping, handleError)
-            }
-          })
-        })
-      })
+      log(chalk.green('•').repeat(counter))
+    })
+
+    log(chalk.green(`${counter} components were specced 😎\n`))
   })
