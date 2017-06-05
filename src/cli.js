@@ -43,26 +43,34 @@ inquirer
       } catch (e) { return }
 
       //  write component definitions
-      template = require('./templates/component')
       file = resolve(componentOutputPath, 'component.js')
-      data = template(name, description, Object.keys(props).reduce((propDefs, prop) => {
-        const {
-          description,
-          defaultValue
-        } = props[prop]
-
-        propDefs[prop] = {
-          description
-        }
-
-        if (defaultValue) {
-          propDefs[prop].default = defaultValue.value
-        }
-
-        return propDefs
-      }, {}))
-
       if (!fs.existsSync(file)) {
+        template = require('./templates/component')
+        data = template(name, description,
+          Object.keys(props).reduce((propDefs, prop) => {
+            const {
+              description,
+              defaultValue
+            } = props[prop]
+
+            if (!description && !defaultValue) {
+              return propDefs
+            }
+
+            propDefs[prop] = {}
+
+            if (description) {
+              propDefs[prop].description = description
+            }
+
+            if (defaultValue) {
+              propDefs[prop].default = defaultValue.value
+            }
+
+            return propDefs
+          }, {})
+        )
+
         fs.ensureFileSync(file)
         fs.writeFileSync(file, data)
       }
