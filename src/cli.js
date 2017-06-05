@@ -76,8 +76,8 @@ inquirer
       }
 
       //  write prop definitions
-      template = require('./templates/props')
       file = resolve(componentOutputPath, 'props.js')
+      template = require('./templates/props')
       data = template(Object.keys(props).reduce((propDefs, prop) => {
         const {
           type: {name},
@@ -91,9 +91,10 @@ inquirer
       }, {}))
       fs.writeFileSync(file, data)
 
+      //  write global definitions
       file = resolve(outputPath, 'globals.js')
-      data = require('./templates/globals')
       if (!fs.existsSync(file)) {
+        data = require('./templates/globals')
         fs.ensureFileSync(file)
         fs.writeFileSync(file, data)
       }
