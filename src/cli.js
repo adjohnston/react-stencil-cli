@@ -45,7 +45,22 @@ inquirer
       //  write component definitions
       template = require('./templates/component')
       file = resolve(componentOutputPath, 'component.js')
-      data = template(name, description)
+      data = template(name, description, Object.keys(props).reduce((propDefs, prop) => {
+        const {
+          description,
+          defaultValue
+        } = props[prop]
+
+        propDefs[prop] = {
+          description
+        }
+
+        if (defaultValue) {
+          propDefs[prop].default = defaultValue.value
+        }
+
+        return propDefs
+      }, {}))
 
       if (!fs.existsSync(file)) {
         fs.ensureFileSync(file)
@@ -61,16 +76,9 @@ inquirer
           required
         } = props[prop]
 
-        const def = {
-          props: [name, required],
-          description: props[prop].description
+        propDefs[prop] = {
+          props: [name, required]
         }
-
-        if (props[prop].defaultValue) {
-          def.default = props[prop].defaultValue.value
-        }
-
-        propDefs[prop] = def
         return propDefs
       }, {}))
       fs.writeFileSync(file, data)
