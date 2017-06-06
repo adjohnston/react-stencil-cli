@@ -4,9 +4,6 @@ module.exports = (name, description, propDefs) => {
   return `export default ${stringify({
     name,
     description,
-    propDefs,
-    notes: {},
-    examples: [],
-    swatches: []
+    propDefs
   })}`
 }
