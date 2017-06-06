@@ -6,6 +6,7 @@ module.exports = (name, description, propDefs) => {
     description,
     propDefs,
     notes: {},
-    examples: []
+    examples: [],
+    swatches: []
   })}`
 }
