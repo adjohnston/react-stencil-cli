@@ -1,6 +1,6 @@
 {
   "name": "react-stencil-cli",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "",
   "bin": {
     "react-stencil": "bin/cli.js"
@@ -9,7 +9,7 @@
     "test": "jest",
     "build": "webpack",
     "watch": "webpack -w",
-    "prepublish": "webpack -p"
+    "prepublish": "jest && webpack -p"
   },
   "repository": {
     "type": "git",
@@ -43,6 +43,7 @@
     "inquirer": "^3.0.6",
     "ramda": "^0.23.0",
     "react-docgen": "^2.13.0",
-    "single-line-log": "^1.1.2"
+    "single-line-log": "^1.1.2",
+    "stringify-object": "^3.2.0"
   }
 }

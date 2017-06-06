@@ -1,10 +1,9 @@
-import {
+const pathHelpers = require('../src/helpers/paths')
+const {
   appendExtensions,
   splitOnHyphen,
-  upperCaseWords,
-  joinChars,
-  getPathName
-} from '../src/helpers/paths'
+  componentCase
+} = pathHelpers
 
 describe('#appendExtensions', () => {
   test(`given 'components' expect 'components/**/*.?(js|jsx)'`, () => {
@@ -18,34 +17,8 @@ describe('#splitOnHyphen', () => {
   })
 })
 
-describe('#upperCaseWords', () => {
-  test(`given ['hello', 'world'] expect ['HELLO', 'WORLD']`, () => {
-    expect(upperCaseWords(['hello', 'world'])).toEqual(['HELLO', 'WORLD'])
-  })
-})
-
-describe('#joinChars', () => {
-  test(`given ['hello', 'world'] expect 'helloworld'`, () => {
-    expect(joinChars(['hello', 'world'])).toEqual('helloworld')
-  })
-})
-
-describe('#getPathName', () => {
-  test('the name of the component from \'/components/atoms/button.jsx\' should be button', () => {
-    const path = '/components/atoms/button.jsx'
-
-    expect(getPathName(path)).toBe('button')
-  })
-
-  test('the name of the component from \'/components/molecules/dialog.js\' should be button', () => {
-    const path = '/components/molecules/dialog.jsx'
-
-    expect(getPathName(path)).toBe('dialog')
-  })
-
-  test('the name should throw without a file', () => {
-    const path = '/components/molecules/'
-
-    expect(() => getPathName(path)).toThrowError('path /components/molecules/ must include component file')
+describe('#componentCase', () => {
+  test(`given ['hello', 'world'] expect ['Hello', 'World']`, () => {
+    expect(componentCase(['hello', 'world'])).toEqual(['Hello', 'World'])
   })
 })

@@ -1,10 +1,9 @@
-module.exports = (componentPath) => (
-  `import React from 'react'
-  import Stencil, {specify} from 'react-stencil'
-  import c from '${componentPath}'
-  import gD from '../global-definitions'
-  import p from './prop-definitions'
-  import d from './component-definitions'
-  const s = specify(gD || {}, p || {}, d || {})
-  export default Stencil(s)(c)`
-)
+const stringify = require('stringify-object')
+
+module.exports = (name, description, propDefs) => {
+  return `export default ${stringify({
+    name,
+    description,
+    propDefs
+  })}`
+}

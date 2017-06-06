@@ -1,48 +1,55 @@
+const globby = require('globby')
 const R = require('ramda')
-const path = require('path')
+const basename = require('path').basename
 
-//    appendExtensions : string > string
-const appendExtensions = path => {
-  return `${path}/**/*.?(js|jsx)`
+//    appendExtensions : string -> string
+const appendExtensions = patterns => {
+  return `${patterns}/**/*.?(js|jsx)`
+}
+
+//    getPaths : string -> array
+const getPaths = patterns => {
+  return globby.sync(appendExtensions(patterns))
 }
 
 //    splitOnHyphen : string -> array
-const splitOnHyphen = (str) => {
-  return R.split('-', str)
+const splitOnHyphen = string => {
+  return string.split('-')
 }
 
-//    upperCaseWords : array -> array
-const upperCaseWords = (words) => {
+//    componentCase : array -> array
+const componentCase = words => {
   return R.map(word => word.replace(/^./, letter => letter.toUpperCase()), words)
 }
 
-//    joinChars : array -> string
-const joinChars = (chars) => {
-  return R.join('', chars)
+//    joinCharactersWithSpace : array -> string
+const joinCharactersWithSpace = characters => {
+  return characters.join(' ')
 }
 
-//    getPathName : string -> string
-const getPathName = (componentPath) => {
-  const pathName = path.basename(componentPath).split('.')
+//    getComponentPathName : string -> string
+const getComponentPathName = componentPath => {
+  const pathName = basename(componentPath).split('.')
 
   if (pathName.length > 1) return pathName[0]
   throw new Error(`path ${componentPath} must include component file`)
 }
 
-//    getComponentName : string -> string
-const getComponentName = (componentPathName) => (
+//    getReadableComponentName : string -> string
+const getReadableComponentName = componentPathName => (
   R.pipe(
     splitOnHyphen,
-    upperCaseWords,
-    joinChars
+    componentCase,
+    joinCharactersWithSpace
   )(componentPathName)
 )
 
 module.exports = {
   appendExtensions,
+  getPaths,
   splitOnHyphen,
-  upperCaseWords,
-  joinChars,
-  getPathName,
-  getComponentName
+  componentCase,
+  joinCharactersWithSpace,
+  getComponentPathName,
+  getReadableComponentName
 }

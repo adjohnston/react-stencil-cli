@@ -2,79 +2,105 @@ const resolve = require('path').resolve
 const fs = require('fs-extra')
 const log = require('single-line-log').stdout
 const chalk = require('chalk')
-const glob = require('globby')
 const reactDocs = require('react-docgen')
 const inquirer = require('inquirer')
 
-const componentTemplate = require('./templates/component')
-const mappingTemplate = require('./templates/mapping')
-
 const {
-  appendExtensions,
-  getPathName,
-  getComponentName
+  getPaths,
+  getComponentPathName,
+  getReadableComponentName
 } = require('./helpers/paths')
 
-const {
-  handleError
-} = require('./helpers/handlers')
-
-let componentCount = 0
-let mapping = ''
+let counter = 0
 
 inquirer
   .prompt(require('./helpers/prompts'))
   .then(answers => {
     const {
       directory,
-      outputPath,
-      shouldMap
+      outputPath
     } = answers
 
-    glob((directory.map && directory.map(appendExtensions)) || appendExtensions(directory))
-      .then((componentPaths) => {
-        fs.ensureFile(resolve(outputPath, 'global-definitions.js'), handleError)
+    const paths = getPaths(directory)
 
-        componentPaths.map(componentPath => {
-          const componentPathName = getPathName(componentPath)
+    paths.map(path => {
+      let props
+      let description
+      let template
+      let file
+      let data
 
-          fs.readFile(componentPath, 'utf8', (error, code) => {
-            if (error) throw error
+      const pathName = getComponentPathName(path)
+      const name = getReadableComponentName(pathName)
+      const componentOutputPath = resolve(outputPath, pathName)
+      const src = fs.readFileSync(path, 'utf8')
 
-            let props
-            try {
-              props = reactDocs.parse(code).props
+      try {
+        const parsed = reactDocs.parse(src)
+        props = parsed.props
+        description = parsed.description
+        counter++
+      } catch (e) { return }
 
-              componentCount++
-              log(chalk.green('•').repeat(componentCount))
-            } catch (e) { return }
+      //  write component definitions
+      file = resolve(componentOutputPath, 'component.js')
+      if (!fs.existsSync(file)) {
+        template = require('./templates/component')
+        data = template(name, description,
+          Object.keys(props).reduce((propDefs, prop) => {
+            const {
+              description,
+              defaultValue
+            } = props[prop]
 
-            const propDefs = Object.keys(props).reduce((previous, prop) => {
-              const {
-                type: {name},
-                required
-              } = props[prop]
-
-              previous[prop] = {props: [name, required]}
-              return previous
-            }, {})
-
-            fs.ensureFile(resolve(outputPath, componentPathName, 'component-definitions.js'), handleError)
-
-            const output = `export default ${JSON.stringify(propDefs, null, 2)}`
-            fs.outputFile(resolve(outputPath, componentPathName, 'prop-definitions.js'), output, handleError)
-
-            if (shouldMap) {
-              const component = componentTemplate(resolve(componentPath))
-              const output = resolve(outputPath, componentPathName, 'component.js')
-              const componentName = getComponentName(componentPathName)
-
-              mapping += mappingTemplate(componentName, componentPathName)
-
-              fs.outputFile(output, component, handleError)
-              fs.outputFile(resolve(outputPath, 'components.js'), mapping, handleError)
+            if (!description && !defaultValue) {
+              return propDefs
             }
-          })
-        })
-      })
+
+            propDefs[prop] = {}
+
+            if (description) {
+              propDefs[prop].description = description
+            }
+
+            if (defaultValue) {
+              propDefs[prop].default = defaultValue.value
+            }
+
+            return propDefs
+          }, {})
+        )
+
+        fs.ensureFileSync(file)
+        fs.writeFileSync(file, data)
+      }
+
+      //  write prop definitions
+      file = resolve(componentOutputPath, 'props.js')
+      template = require('./templates/props')
+      data = template(Object.keys(props).reduce((propDefs, prop) => {
+        const {
+          type: {name},
+          required
+        } = props[prop]
+
+        propDefs[prop] = {
+          props: [name, required]
+        }
+        return propDefs
+      }, {}))
+      fs.writeFileSync(file, data)
+
+      //  write global definitions
+      file = resolve(outputPath, 'globals.js')
+      if (!fs.existsSync(file)) {
+        data = require('./templates/globals')
+        fs.ensureFileSync(file)
+        fs.writeFileSync(file, data)
+      }
+
+      log(chalk.green('•').repeat(counter))
+    })
+
+    log(chalk.green(`${counter} components were specced 😎\n`))
   })
