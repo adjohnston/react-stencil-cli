@@ -6,7 +6,8 @@
     "react-stencil": "bin/cli.js"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
+    "test:watch": "jest --coverage --watch",
     "build": "webpack",
     "watch": "webpack -w",
     "prepublish": "jest && webpack -p"
