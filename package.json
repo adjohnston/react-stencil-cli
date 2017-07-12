@@ -8,9 +8,9 @@
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
-    "build": "webpack",
+    "build": "webpack -p",
     "watch": "webpack -w",
-    "prepublish": "jest && webpack -p"
+    "prepublish": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",
