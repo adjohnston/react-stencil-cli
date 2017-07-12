@@ -1,4 +1,4 @@
 module.exports = `export default {
-  propDefs: {},
+  props: {},
   swatches: []
 }`
