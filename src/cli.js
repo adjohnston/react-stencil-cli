@@ -39,57 +39,33 @@ inquirer
         const parsed = reactDocs.parse(src)
         props = parsed.props
         description = parsed.description
-        counter++
       } catch (e) { return }
 
       //  write component definitions
       file = resolve(componentOutputPath, 'component.js')
       if (!fs.existsSync(file)) {
         template = require('./templates/component')
-        data = template(name, description,
-          Object.keys(props).reduce((propDefs, prop) => {
-            const {
-              description,
-              defaultValue
-            } = props[prop]
+        data = template(name, description, Object.keys(props).reduce((acc, prop) => {
+          const {
+            type: { name },
+            description,
+            defaultValue,
+            required
+          } = props[prop]
 
-            if (!description && !defaultValue) {
-              return propDefs
-            }
+          acc[prop] = {
+            type: name || '',
+            description: description || '',
+            default: (defaultValue && defaultValue.value) || '',
+            required
+          }
 
-            propDefs[prop] = {}
-
-            if (description) {
-              propDefs[prop].description = description
-            }
-
-            if (defaultValue) {
-              propDefs[prop].default = defaultValue.value
-            }
-
-            return propDefs
-          }, {})
-        )
-
+          return acc
+        }, {}))
         fs.ensureFileSync(file)
         fs.writeFileSync(file, data)
+        counter++
       }
-
-      //  write prop definitions
-      file = resolve(componentOutputPath, 'props.js')
-      template = require('./templates/props')
-      data = template(Object.keys(props).reduce((propDefs, prop) => {
-        const {
-          type: {name},
-          required
-        } = props[prop]
-
-        propDefs[prop] = {
-          props: [name, required]
-        }
-        return propDefs
-      }, {}))
-      fs.writeFileSync(file, data)
 
       //  write global definitions
       file = resolve(outputPath, 'globals.js')
@@ -102,5 +78,5 @@ inquirer
       log(chalk.green('•').repeat(counter))
     })
 
-    log(chalk.green(`${counter} components were specced 😎\n`))
+    log(chalk.green(`${counter} components were specced ${counter ? '😎' : '😭'}\n`))
   })
