@@ -1,9 +1,18 @@
 const stringify = require('stringify-object')
 
-module.exports = (name, description, propDefs) => {
+const stringifyOptions = {
+  indent: '  ',
+  inlineCharacterLimit: 80
+}
+
+module.exports = (name, description, props) => {
   return `export default ${stringify({
     name,
     description,
-    propDefs
-  })}`
+    status: '',
+    notes: {},
+    swatches: [],
+    examples: {},
+    props
+  }, stringifyOptions)}`
 }
