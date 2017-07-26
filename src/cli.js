@@ -4,12 +4,9 @@ const log = require('single-line-log').stdout
 const chalk = require('chalk')
 const reactDocs = require('react-docgen')
 const inquirer = require('inquirer')
-
-const {
-  getPaths,
-  getComponentPathName,
-  getReadableComponentName
-} = require('./helpers/paths')
+const getPaths = require('./helpers/get-paths')
+const getComponentPathName = require('./helpers/get-component-path-name')
+const getReadableComponentName = require('./helpers/get-readable-component-name')
 
 let counter = 0
 
@@ -42,7 +39,7 @@ inquirer
       } catch (e) { return }
 
       //  write component definitions
-      file = resolve(componentOutputPath, 'component.js')
+      file = resolve(componentOutputPath, 'spec.js')
       if (!fs.existsSync(file)) {
         template = require('./templates/component')
         data = template(name, description, Object.keys(props).reduce((acc, prop) => {
@@ -68,9 +65,9 @@ inquirer
       }
 
       //  write global definitions
-      file = resolve(outputPath, 'globals.js')
+      file = resolve(outputPath, 'global-spec.js')
       if (!fs.existsSync(file)) {
-        data = require('./templates/globals')
+        data = require('./templates/global')
         fs.ensureFileSync(file)
         fs.writeFileSync(file, data)
       }
@@ -80,3 +77,4 @@ inquirer
 
     log(chalk.green(`${counter} components were specced ${counter ? '😎' : '😭'}\n`))
   })
+  .catch((err) => console.log(err))
