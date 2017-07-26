@@ -4,7 +4,6 @@ const log = require('single-line-log').stdout
 const chalk = require('chalk')
 const reactDocs = require('react-docgen')
 const inquirer = require('inquirer')
-
 const getPaths = require('./helpers/get-paths')
 const getComponentPathName = require('./helpers/get-component-path-name')
 const getReadableComponentName = require('./helpers/get-readable-component-name')
@@ -78,3 +77,4 @@ inquirer
 
     log(chalk.green(`${counter} components were specced ${counter ? '😎' : '😭'}\n`))
   })
+  .catch((err) => console.log(err))
