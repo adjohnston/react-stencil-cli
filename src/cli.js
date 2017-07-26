@@ -5,11 +5,9 @@ const chalk = require('chalk')
 const reactDocs = require('react-docgen')
 const inquirer = require('inquirer')
 
-const {
-  getPaths,
-  getComponentPathName,
-  getReadableComponentName
-} = require('./helpers/paths')
+const getPaths = require('./helpers/get-paths')
+const getComponentPathName = require('./helpers/get-component-path-name')
+const getReadableComponentName = require('./helpers/get-readable-component-name')
 
 let counter = 0
 
