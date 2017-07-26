@@ -1,12 +1,12 @@
 module.exports = [
   {
     name: 'directory',
-    message: 'Where are your components?',
+    message: 'Where can I find your components? 🤔',
     validate: (answer) => answer !== ''
   },
   {
     name: 'outputPath',
-    message: 'Where do you want generated specs to live?',
+    message: 'Where should I put the generated specs? 🤔',
     validate: (answer) => answer !== ''
   }
 ]
