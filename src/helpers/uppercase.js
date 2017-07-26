@@ -7,4 +7,4 @@ const uppercase = words => {
   return R.map(word => word.replace(/^./, letter => letter.toUpperCase()), words)
 }
 
-export default uppercase
+module.exports = uppercase

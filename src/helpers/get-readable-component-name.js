@@ -12,4 +12,4 @@ const getReadableComponentName = componentPathName => (
   )(componentPathName)
 )
 
-export default getReadableComponentName
+module.exports = getReadableComponentName

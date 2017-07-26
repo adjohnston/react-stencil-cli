@@ -7,4 +7,4 @@ const getPaths = patterns => {
   return globby.sync(patterns)
 }
 
-export default getPaths
+module.exports = getPaths

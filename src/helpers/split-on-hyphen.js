@@ -3,4 +3,4 @@ const splitOnHyphen = string => {
   return string.split('-')
 }
 
-export default splitOnHyphen
+module.exports = splitOnHyphen

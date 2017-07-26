@@ -8,4 +8,4 @@ const getComponentPathName = componentPath => {
   throw new Error(`path ${componentPath} must include component file`)
 }
 
-export default getComponentPathName
+module.exports = getComponentPathName
