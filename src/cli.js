@@ -40,7 +40,7 @@ inquirer
       } catch (e) { return }
 
       //  write component definitions
-      file = resolve(componentOutputPath, 'component.js')
+      file = resolve(componentOutputPath, 'spec.js')
       if (!fs.existsSync(file)) {
         template = require('./templates/component')
         data = template(name, description, Object.keys(props).reduce((acc, prop) => {
@@ -66,9 +66,9 @@ inquirer
       }
 
       //  write global definitions
-      file = resolve(outputPath, 'globals.js')
+      file = resolve(outputPath, 'global-spec.js')
       if (!fs.existsSync(file)) {
-        data = require('./templates/globals')
+        data = require('./templates/global')
         fs.ensureFileSync(file)
         fs.writeFileSync(file, data)
       }
