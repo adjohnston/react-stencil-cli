@@ -3,7 +3,6 @@ import globby from 'globby'
 import getPaths from 'src/helpers/get-paths'
 
 test('should call fs.pathExistsSync when called', () => {
-  console.log(fs.existsSync)
   const spy = jest.spyOn(fs, 'existsSync')
 
   getPaths('**/*.js')
