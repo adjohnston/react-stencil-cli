@@ -3,7 +3,7 @@
   "version": "0.8.0",
   "description": "",
   "bin": {
-    "react-stencil": "bin/cli.js"
+    "stencil": "bin/cli.js"
   },
   "scripts": {
     "test": "jest --coverage",
