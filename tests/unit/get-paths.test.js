@@ -1,15 +1,20 @@
+import fs from 'fs-extra'
 import globby from 'globby'
 import getPaths from 'src/helpers/get-paths'
+
+test('should call fs.pathExistsSync when called', () => {
+  console.log(fs.existsSync)
+  const spy = jest.spyOn(fs, 'existsSync')
+
+  getPaths('**/*.js')
+  expect(spy).toHaveBeenCalled()
+})
 
 test('should call globby.sync when called', () => {
   const spy = jest.spyOn(globby, 'sync')
 
   getPaths('**/*.js')
   expect(spy).toHaveBeenCalled()
-})
-
-test('should return an array of paths', () => {
-  expect(getPaths('**/*.js')).toBeInstanceOf(Array)
 })
 
 test('should throw an error of type TypeError when no string is given', () => {

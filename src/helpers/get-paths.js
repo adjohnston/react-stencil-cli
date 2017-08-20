@@ -5,7 +5,7 @@ const globby = require('globby')
 const getPaths = pattern => {
   if (typeof pattern !== 'string') throw new TypeError()
 
-  if (fs.pathExistsSync(pattern)) {
+  if (fs.existsSync(pattern)) {
     return pattern
   }
 
