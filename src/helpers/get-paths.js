@@ -1,10 +1,15 @@
+const fs = require('fs-extra')
 const globby = require('globby')
 
-//    getPaths : string -> array
-const getPaths = patterns => {
-  if (typeof patterns !== 'string') throw new TypeError()
+//    getPaths : string -> string : array
+const getPaths = pattern => {
+  if (typeof pattern !== 'string') throw new TypeError()
 
-  return globby.sync(patterns)
+  if (fs.pathExistsSync(pattern)) {
+    return pattern
+  }
+
+  return globby.sync(pattern)
 }
 
 module.exports = getPaths
